@@ -1,0 +1,6 @@
+robotframework==3.0.2
+robotframework-appiumlibrary==1.4.6
+robotframework-requests==0.4.7
+robotframework-seleniumlibrary==2.9.2
+selenium==3.141.0
+requests==2.18.4

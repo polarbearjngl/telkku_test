@@ -1,3 +1,20 @@
+# IDE specific  #
+###############################
+.project
+.pydevproject
+/.git
+/.settings
+.idea/*
+!/.idea/inspectionProfiles/
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
+libspecs/
+red.xml
+log.html
+output.xml
+report.html
+*.apk
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
