@@ -4,7 +4,8 @@ Library    AppiumLibrary    timeout=10    run_on_failure=No Operation    WITH NA
 Library    constants.Constants                                           WITH NAME    Constants
 Library    robot.libraries.Process                                       WITH NAME    Process
 Library    RequestsLibrary.RequestsKeywords                              WITH NAME    Requests
-Library    library.api.Api                                               WITH NAME    Api
+Library    library.api.Api          appium_driver=Appium                 WITH NAME    Api
+Library    library.api.TelkkuApi    appium_driver=Appium                 WITH NAME    TelkkuApi
 
 
 *** Variables ***
@@ -18,13 +19,18 @@ Suite Setup
     [Timeout]    3 minute
 
     ${Constants}=   Get Library Instance    Constants
+    ${Api}=   Get Library Instance    Api
+    ${TelkkuApi}=   Get Library Instance    TelkkuApi
 
     Comment   Set suite variables
+    Set Suite Variable    ${Api}
+    Set Suite Variable    ${TelkkuApi}
     Set Suite Variable    ${Constants}
     Set Suite Variable    ${APPIUM_HUB}                ${Constants.APPIUM_HUB}
     Set Suite Variable    ${APK_LOCATION}              ${Constants.APK_LOCATION}
     Set Suite Variable    ${API_28_DEVICE}             ${Constants.API_28_DEVICE_NAME}
     Set Suite Variable    ${API_25_DEVICE}             ${Constants.API_25_DEVICE_NAME}
+    Set Suite Variable    ${API_21_DEVICE}             ${Constants.API_21_DEVICE_NAME}
 
     Comment   Android Virtual Device under test
     Set Suite Variable    ${CURRENT_TESTING_DEVICE}    ${API_25_DEVICE}
@@ -39,15 +45,19 @@ Suite Setup
     ...    Api.Get    url=${Constants.APPIUM_SESSIONS}
 
     Comment   Start android virtual device
-	Process.Start Process    command=${Constants.ANDROID_EMULATOR_HOME}${/}emulator -avd ${CURRENT_TESTING_DEVICE} -wipe-data
+	Process.Start Process    command=${Constants.ANDROID_EMULATOR_HOME}${/}emulator -avd ${CURRENT_TESTING_DEVICE} -wipe-data -timezone ${Constants.TIMEZONE}
 	...                      cwd=${Constants.ANDROID_EMULATOR_HOME}
 	...                      shell=True
 	...                      alias=Emulator
+
+    Comment    Start Application
+    Open Telkku Application
 
 Suite Teardown
     [Documentation]    Suite_teardown
     [Timeout]    1 minute
 
+    Comment    Close Application
     Appium.Close All Applications
     Process.Terminate All Processes
 

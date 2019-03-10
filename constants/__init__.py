@@ -1,8 +1,10 @@
-from .Elements import Elements
-from .Environment import Environment
+from constants.Api import Api
+from constants.Elements import Elements
+from constants.Environment import Environment
 
 
 class Constants(Environment,
-                Elements):
+                Elements,
+                Api):
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
