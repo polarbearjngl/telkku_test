@@ -4,8 +4,9 @@ Library    AppiumLibrary    timeout=10    run_on_failure=No Operation    WITH NA
 Library    constants.Constants                                           WITH NAME    Constants
 Library    robot.libraries.Process                                       WITH NAME    Process
 Library    RequestsLibrary.RequestsKeywords                              WITH NAME    Requests
-Library    library.api.Api          appium_driver=Appium                 WITH NAME    Api
-Library    library.api.TelkkuApi    appium_driver=Appium                 WITH NAME    TelkkuApi
+Library    library.api.Api                                               WITH NAME    Api
+Library    library.api.TelkkuApi                                         WITH NAME    TelkkuApi
+Library    steps.MoviesSteps                                             WITH NAME    MoviesSteps
 
 
 *** Variables ***
@@ -18,14 +19,12 @@ Suite Setup
     [Documentation]    Suite_setup
     [Timeout]    3 minute
 
-    ${Constants}=   Get Library Instance    Constants
-    ${Api}=   Get Library Instance    Api
-    ${TelkkuApi}=   Get Library Instance    TelkkuApi
+    ${CONSTANTS}=        Get Library Instance    Constants
+    ${APPIUM}=           Get Library Instance    Appium
 
     Comment   Set suite variables
-    Set Suite Variable    ${Api}
-    Set Suite Variable    ${TelkkuApi}
-    Set Suite Variable    ${Constants}
+    Set Suite Variable    ${CONSTANTS}
+    Set Suite Variable    ${APPIUM}
     Set Suite Variable    ${APPIUM_HUB}                ${Constants.APPIUM_HUB}
     Set Suite Variable    ${APK_LOCATION}              ${Constants.APK_LOCATION}
     Set Suite Variable    ${API_28_DEVICE}             ${Constants.API_28_DEVICE_NAME}
@@ -33,20 +32,20 @@ Suite Setup
     Set Suite Variable    ${API_21_DEVICE}             ${Constants.API_21_DEVICE_NAME}
 
     Comment   Android Virtual Device under test
-    Set Suite Variable    ${CURRENT_TESTING_DEVICE}    ${API_25_DEVICE}
+    Set Suite Variable    ${CURRENT_TESTING_DEVICE}    ${API_21_DEVICE}
 
     Comment   Start Appium server
-	Process.Start Process    command=appium -a ${Constants.APPIUM_HOST} -p ${Constants.APPIUM_PORT}
+	Process.Start Process    command=appium -a ${Constants.APPIUM_HOST} -p ${CONSTANTS.APPIUM_PORT}
 	...                      cwd=${Constants.ANDROID_EMULATOR_HOME}
 	...                      shell=True
 	...                      alias=Appium
 
     Wait Until Keyword Succeeds    1 min    0 sec
-    ...    Api.Get    url=${Constants.APPIUM_SESSIONS}
+    ...    Api.Get    url=${CONSTANTS.APPIUM_SESSIONS}
 
     Comment   Start android virtual device
-	Process.Start Process    command=${Constants.ANDROID_EMULATOR_HOME}${/}emulator -avd ${CURRENT_TESTING_DEVICE} -wipe-data -timezone ${Constants.TIMEZONE}
-	...                      cwd=${Constants.ANDROID_EMULATOR_HOME}
+	Process.Start Process    command=${CONSTANTS.ANDROID_EMULATOR_HOME}${/}emulator -avd ${CURRENT_TESTING_DEVICE} -wipe-data -timezone ${CONSTANTS.TIMEZONE} -no-boot-anim -skip-adb-auth
+	...                      cwd=${CONSTANTS.ANDROID_EMULATOR_HOME}
 	...                      shell=True
 	...                      alias=Emulator
 

@@ -23,3 +23,7 @@ class Environment(object):
     APPIUM_PORT = '4723'
     APPIUM_HUB = 'http://' + APPIUM_HOST + ':' + APPIUM_PORT + '/wd/hub'
     APPIUM_SESSIONS = APPIUM_HUB + '/sessions'
+
+    # Weekdays
+    WEEKDAYS = {0: u'Maanantai', 1: u'Tiistai', 2: u'Keskiviikko', 3: u'Torstai', 4: u'Perjantai', 5: u'Lauantai',
+                6: u'Sunnuntai'}

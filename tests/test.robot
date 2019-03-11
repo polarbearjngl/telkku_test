@@ -5,31 +5,43 @@ Suite Setup       Suite Setup
 Suite Teardown    Suite Teardown
 Test Setup        Test Setup
 Test Teardown     Test Teardown
-Test Timeout      3 minutes
+Test Timeout      5 minutes
 
+*** Variables ***
+${ELOKUVAT}    Elokuvat
 
 *** Test Cases ***
-Test title
-    [Tags]    DEBUG
-    Appium.Wait Until Page Contains Element        xpath=${Constants.AAAA}
+Count Tooday Movies Count
+    [Documentation]    Test of count movies on Tooday screen
+    [Tags]  Elokuvat
 
-    ${movieImageUrl}=   Appium.get_element_attribute
-    ...                                         xpath=${Constants.AAAA}
-    ...                                         attribute=app:movieImageUrl
-    Log To Console     ${movieImageUrl}
+    ${all_movies}=      TelkkuApi.Get Upcoming Movies    appium_lib=${APPIUM}
+
+    ${movies_by_day}=    MoviesSteps.Get Movies By Day    movies=${all_movies}
+    ...                                                   appium_lib=${APPIUM}
+
+    MoviesSteps.Check Movies Count          expected_movies=${movies_by_day}
+
 
 *** Keywords ***
 Test Setup
     [Documentation]    Preconditions for test
     [Timeout]    3 min
-    Appium.Wait Until Page Contains Element   accessibility_id=${Constants.NAVIGATION_MENU_BUTTON}
-    Appium.Click Element                      accessibility_id=${Constants.NAVIGATION_MENU_BUTTON}
+    Appium.Wait Until Page Contains Element    accessibility_id=${CONSTANTS.NAVIGATION_MENU_BUTTON}
+    Appium.Click Element                       accessibility_id=${CONSTANTS.NAVIGATION_MENU_BUTTON}
 
-    Appium.Wait Until Page Contains Element   class=${Constants.MAIN_MENU}
-    Appium.Click Element                      xpath=${Constants.ELOKUVAT_MENU_ITEM}
+    Appium.Wait Until Page Contains Element    class=${CONSTANTS.MAIN_MENU}
+    Appium.Click Element                       xpath=${CONSTANTS.ELOKUVAT_MENU_ITEM}
+
+    Appium.Wait Until Page Contains Element    id=${CONSTANTS.DATE_SELECTOR}
 
 Test Teardown
     [Documentation]    Teardown for test
     [Timeout]    1 min
 
-    Comment    Test End
+    Comment    Test End. Go to start screen.
+    Appium.Wait Until Page Contains Element   accessibility_id=${CONSTANTS.NAVIGATION_MENU_BUTTON}
+    Appium.Click Element                      accessibility_id=${CONSTANTS.NAVIGATION_MENU_BUTTON}
+
+    Appium.Wait Until Page Contains Element   class=${CONSTANTS.MAIN_MENU}
+    Appium.Click Element                      xpath=${CONSTANTS.TV_OHJELMAT_MENU_ITEM}

@@ -8,9 +8,6 @@ class Api(object):
     builtin_lib = BuiltIn()  # type: BuiltIn()
     STATUS_CODE_SUCCESS = 200
 
-    def __init__(self, appium_driver):
-        self._appium_driver = appium_driver
-
     def get(self, url, params=None, code=STATUS_CODE_SUCCESS, **kwargs):
         """Basic GET request.
 

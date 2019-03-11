@@ -1,8 +1,6 @@
 from constants.Api import Api as ApiConsts
 from datetime import datetime
 from constants.Elements import Elements
-from re import findall
-
 from entities.BaseEntities import BaseEntity, BaseEntitiesList
 
 
@@ -20,22 +18,23 @@ class Movies(BaseEntitiesList):
 
         """
         for date, movies in grouped_publications.iteritems():
+            n = 1
             date = datetime.strptime(date, ApiConsts.SHORT_DATE)
             for movie in movies:
-                self._all.append(Movie(
-                    appium_driver=self._appium_driver, locator=Elements.MOVIE_ELEMENT, date=date, **movie))
+                self._all.append(Movie(appium_lib=self.appium_lib, locator=Elements.MOVIE_ELEMENT, date=date, n=n, **movie))
+                n += 1
         return self
 
 
 class Movie(BaseEntity):
     """Class for Movie."""
 
-    def __init__(self, appium_driver, locator, date, **kwargs):
-        super(Movie, self).__init__(appium_driver, locator)
+    def __init__(self, appium_lib, locator, date, n, **kwargs):
+        super(Movie, self).__init__(appium_lib, locator, n, **kwargs)
         self.date = date
-
-        for key, value in kwargs.iteritems():
-            if isinstance(value, unicode):
-                if findall(string=value, pattern=r'\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+'):
-                    value = datetime.strptime(value, ApiConsts.SERVER_TIME_FORMAT)
-            setattr(self, key, value)
+        self.day = date.day
+        self.month = date.month
+        self.weekday = date.weekday()
+        self.day_month = '%s.%s' % (self.day, self.month)
+        if hasattr(self, 'imdbRating'):
+            self.imdb_text = 'IMDb %s.%s' % (str(self.imdbRating)[0], str(self.imdbRating)[1])

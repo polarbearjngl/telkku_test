@@ -5,9 +5,11 @@ class Elements(object):
 
     # Main Menu
     MAIN_MENU = 'androidx.appcompat.widget.LinearLayoutCompat'  # class
-    ELOKUVAT_MENU_ITEM = '//androidx.appcompat.widget.LinearLayoutCompat[2]'  # xpath
+    TV_OHJELMAT_MENU_ITEM = '//androidx.appcompat.widget.LinearLayoutCompat[1]'
+    ELOKUVAT_MENU_ITEM = '//androidx.appcompat.widget.LinearLayoutCompat[2]'
 
     # Movie List
+    TOOLBAR_TITLE = '//android.widget.LinearLayout/android.view.View/android.widget.TextView'  # xpath
     DATE_SELECTOR = 'fi.almamedia.telkkucom.staging:id/action_toggle_date_selector'  # id
     MOVIE_ELEMENT = '//androidx.recyclerview.widget.RecyclerView/android.widget.FrameLayout[{n}]'
     MOVIE_MAIN_IMAGE = MOVIE_ELEMENT + '/android.view.ViewGroup/android.widget.ImageView[{1}]'
